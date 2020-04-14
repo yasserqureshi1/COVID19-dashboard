@@ -17,6 +17,7 @@ Flask==1.1.1
 Flask-Compress==1.4.0
 future==0.18.2
 geopandas==0.7.0
+gunicorn==20.0.4
 idna==2.9
 itsdangerous==1.1.0
 Jinja2==2.11.1
@@ -39,4 +40,3 @@ Shapely==1.7.0
 six==1.14.0
 urllib3==1.25.8
 Werkzeug==1.0.0
-gunicorn==19.5.0
