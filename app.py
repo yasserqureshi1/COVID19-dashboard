@@ -18,6 +18,7 @@ app.layout = html.Div(
 
         html.Div([
             html.H1(children='COVID19 Dashboard', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
+            html.H4(children='By Yasser Qureshi', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
             html.H4(children='Worldwide Cases', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
         ], className="row", ),
 
