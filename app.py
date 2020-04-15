@@ -7,22 +7,59 @@ import plotly.graph_objects as go
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
 
 df1 = pd.read_json('https://coronavirus-tracker-api.herokuapp.com/confirmed')
 df2 = pd.read_json('https://coronavirus-tracker-api.herokuapp.com/deaths')
 df3 = pd.read_json('https://coronavirus-tracker-api.herokuapp.com/recovered')
+
+df = pd.json_normalize(df1['locations'])
+
+a = df.groupby(by='country').agg({'latest': 'sum', 'country_code': 'min'}).reset_index()
+dfcountry = pd.read_csv('countryMap.txt', sep='\t')
+dff = a.merge(dfcountry, how='inner', left_on=['country_code'], right_on=['2let'])
+
+mapbox_access_token = "pk.eyJ1IjoicGxvdGx5bWFwYm94IiwiYSI6ImNqdnBvNDMyaTAxYzkzeW5ubWdpZ2VjbmMifQ.TXcBE-xg9BFdV2ocecc_7g"
+mapbox_style = "mapbox://styles/plotlymapbox/cjvprkf3t1kns1cqjxuxmwixz"
 
 app.layout = html.Div(
     [
 
         html.Div([
             html.H1(children='COVID19 Dashboard', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
-            html.H4(children='By Yasser Qureshi', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
-            html.H4(children='Worldwide Cases', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
+            html.H6(children='By Yasser Qureshi', style={'textAlign': 'center', 'font-family': 'Helvetica'})
         ], className="row", ),
 
+    html.H4(children='Worldmap of Cases', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
+
         html.Div([
+            dcc.Graph(id='map-display',
+                      figure={
+                          'data': [go.Choropleth(
+                              locations=dff['3let'],
+                              z=dff['latest'],
+                              text=dff['country'],
+                              colorscale='sunset',
+                              autocolorscale=False,
+                              reversescale=True,
+                              marker_line_color='darkgray',
+                              marker_line_width=0.5,
+                              colorbar_title='Cases',
+                          )
+                          ],
+                          'layout': dict(
+                              title_text='World Map of Cases',
+                              geo=dict(
+                                  showframe=False,
+                                  showcoastlines=False,
+                                  projection_type='equirectangular'))
+                      }
+                      ),
+
+        ]),
+
+        html.Div([
+
+            html.H4(children='Worldwide Cases', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
 
             html.Div(
                 dcc.Graph(
@@ -62,8 +99,7 @@ app.layout = html.Div(
         html.Div([
             html.Div(id='output1', style={'width': 600, 'height': 400}, className='six columns'),
             html.Div(id='output2', style={'width': 600, 'height': 400}, className='six columns')],
-            className='row'
-        )
+            className='row'),
 
     ]
 )
