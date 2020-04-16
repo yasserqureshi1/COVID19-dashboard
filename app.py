@@ -30,8 +30,10 @@ app.layout = html.Div(
             html.H1(children='COVID19 Dashboard', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
             html.H6(children='By Yasser Qureshi', style={'textAlign': 'center', 'font-family': 'Helvetica'})
         ], className="row", ),
-
-    html.H4(children='Worldmap of Cases', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
+    
+        html.H6(children=["Last Updated: ", df1['last_updated'][1]], style={'textAlign': 'center', 'font-family': 'Helvetica'}),
+        
+        html.H4(children='Worldmap of Cases', style={'textAlign': 'center', 'font-family': 'Helvetica'}),
 
         html.Div([
             dcc.Graph(id='map-display',
