@@ -5,8 +5,8 @@ https://covid19-dashboard1.herokuapp.com
 
 Data sources:
  - John Hopkins University (JHU)
- - World Health Organisation (WHO)
- - Financial Times (FT)
+ - Conference of State Bank Supervisors (CSBS)
+ - New York Times (NYT)
 
 ## Installation
 
