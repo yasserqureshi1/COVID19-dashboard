@@ -334,7 +334,7 @@ def plotofrate(country):
                          'data': [
                              {'x': xrate, 'y': rate, 'type': 'line', 'name': 'Confirmed'},
                              {'x': x1rate, 'y': rate1, 'type': 'line', 'name': 'Deaths'},
-                             {'x': xrate, 'y': ave, 'type': 'line', 'name': 'Average Confirmed}
+                             {'x': xrate, 'y': ave, 'type': 'line', 'name': 'Average Confirmed'}
                          ],
                          'layout': {
                              'title': 'Cases by Day:',
