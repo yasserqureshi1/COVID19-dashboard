@@ -10,13 +10,15 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 server = app.server
 
+# Gather COVID19 data
 df1 = pd.read_json('https://coronavirus-tracker-api.herokuapp.com/confirmed')
 df2 = pd.read_json('https://coronavirus-tracker-api.herokuapp.com/deaths')
 df3 = pd.read_json('https://coronavirus-tracker-api.herokuapp.com/recovered')
 
+# Process data to be used for map
 df = pd.json_normalize(df1['locations'])
-
 a = df.groupby(by='country').agg({'latest': 'sum', 'country_code': 'min'}).reset_index()
+
 # dfcountry = pd.read_csv('countryMap.txt', sep='\t')
 dfcountry = pd.read_csv(
     'https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv')
@@ -28,12 +30,14 @@ sortedtable = a.sort_values(by='latest', ascending=False, ignore_index=True)
 mapbox_access_token = "pk.eyJ1IjoicGxvdGx5bWFwYm94IiwiYSI6ImNqdnBvNDMyaTAxYzkzeW5ubWdpZ2VjbmMifQ.TXcBE-xg9BFdV2ocecc_7g"
 mapbox_style = "mapbox://styles/plotlymapbox/cjvprkf3t1kns1cqjxuxmwixz"
 
+# Create dictionary with continent data
 continent = dict(Asia=0, Americas=0, Europe=0, Africa=0, Oceania=0)
 for i in continent:
     for j in range(len(dff)):
         if i == dff.region[j]:
             continent[i] = continent[i] + dff.latest[j]
 
+# Webpage 
 app.layout = html.Div([
     html.Div(id='top', children=[
         html.Div(id='topleft', className='four columns', children=[
@@ -49,28 +53,6 @@ app.layout = html.Div([
             )]),
             html.Div(id='worldstats', children=[
                 html.Div(id='piechart', className='five columns', children=[
-                    # dcc.Graph(
-                    #     figure=go.Figure(
-                    #         data=go.Pie(
-                    #             labels=['Confirmed', 'Deaths', 'Recovered'],
-                    #             values=[df1.latest[1], df2.latest[1], df3.latest[1]],
-                    #             textinfo='label+value',
-                    #             showlegend=False,
-                    #
-                    #         ),
-                    #         layout=go.Layout(
-                    #             margin=go.layout.Margin(
-                    #                 l=10,
-                    #                 r=10,
-                    #                 b=40,
-                    #                 t=40,
-                    #                 pad=0
-                    #             ),
-                    #             title_text='Worldwide Cases'
-                    #         ),
-                    #     ),
-                    #     config={"displayModeBar": False}
-                    # )
                     html.H6([' ', html.Br()], style={'textAlign': 'center', 'font-family': 'Helvetica'}),
                     html.H6(['CONFIRMED:'], style={'textAlign': 'center', 'font-family': 'Helvetica'}),
                     html.H4([df1.latest[1]], style={'textAlign': 'center', 'font-family': 'Helvetica'}),
@@ -340,12 +322,19 @@ def plotofrate(country):
         else:
             rate1 = 1
             x1rate = [1, 1]
+    
+    numbers_series = pd.Series(rate)
+    windows = numbers_series.rolling(10)
+    moving_averages = windows.mean()
 
+    ave = moving_averages.tolist()
+    
     return dcc.Graph(id=f"{country} Rate",
                      figure={
                          'data': [
                              {'x': xrate, 'y': rate, 'type': 'line', 'name': 'Confirmed'},
-                             {'x': x1rate, 'y': rate1, 'type': 'line', 'name': 'Deaths'}
+                             {'x': x1rate, 'y': rate1, 'type': 'line', 'name': 'Deaths'},
+                             {'x': xrate, 'y': ave, 'type': 'line', 'name': 'Average Confirmed}
                          ],
                          'layout': {
                              'title': 'Cases by Day:',
