@@ -1,7 +1,5 @@
 # COVID19-Dashboard
 
-**NOTE THAT THE DATA SOURCE USED IS NO LONGER AVAILABLE RESULTING IN THE PAGE TO DISPLAY AN ERROR**
-
 This is a repository that contains the files for a COVID19 Dashboard that is deloyed on Heroku. Find the dashboard here:
 https://covid19-dashboard1.herokuapp.com
 
@@ -30,7 +28,8 @@ plotly.graph_objects
 
 ## Next Steps...
 
-Allow the text box to take different inputs. Currently it takes inputs of countries that start with a capital letter and are formatted correctly (e.g. United Kingdom, rather than UK or united kingdom).
+- [ ] Rewrite code in functions and objects 
+- [ ] Allow the text box to take different inputs. Currently it takes inputs of countries that start with a capital letter and are formatted correctly (e.g. United Kingdom, rather than UK or united kingdom).
+- [ ] Collate China data. Currently data surrounding China is distributed in its regions (e.g. Beijing ).
 
-Collate China data. Currently data surrounding China is distributed in its regions (e.g. Beijing ).
 
